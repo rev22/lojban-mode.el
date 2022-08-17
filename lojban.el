@@ -5,7 +5,7 @@
 ;; Author: Michele Bini
 ;; Maintainer: Michele Bini <mibin@libero.it>
 ;; Created: 21 Nov 2002
-;; Version: 0.23
+;; Version: 0.24
 ;; Keywords: lojban, i18n
 
 ;; This is free software; you can redistribute it and/or modify it
@@ -26,7 +26,7 @@
 ;;; Commentary:
 
 ;; This file is a library of functions, variables, regexps and
-;; interactive commands for handling lojban text.
+;; interactive commands for handling Lojban text.
 
 ;; To enable auto-loading, add the following to your .emacs (and make
 ;; sure that the lojban.el file is in one of the default load paths
@@ -36,7 +36,27 @@
 ;; You may replace the command above (lojban-parse-region) with any
 ;; other in this file you find useful.
 
+;; Some commands require specific files or programs to be installed in your
+;; system.  In Debian and other Linux distributions, you may be covered by
+;; packages named "lojban-common", and "jbofihe".
+
+;; Otherwise you may install the files/programs manually:
+
+;; "cmavo.txt", required by lojban-describe-cmavo, can be downloaded from:
+;; https://www.lojban.org/publications/wordlists/cmavo.txt
+
+;; "gismu.txt", required by lojban-describe-gismu, can be downloaded from:
+;; https://www.lojban.org/publications/wordlists/gismu.txt
+
+;; The programs "jbofihe" and "cmafihe" can be obtained from:
+;; https://github.com/lojban/jbofihe
+;; These are required by lojban-parse-region and lojban-gloss-region
+
+;; After this, you can specify the program/file locations via:
+;; M-x customize lojban
+
 ;;; History:
+;; v0.24 - document external dependencies
 ;; v0.23 - bugfix (lojban-cc-p)
 ;; v0.22 - new brivla and cmene regexps; lojban-sentence-*
 ;; functions renamed; bugfixes: lojban-cc-p, lojban-c/cc-p,
@@ -372,7 +392,7 @@ See also `lojban-gismu-p'."
   "Regexp matching a cmene, with eventual false positives.
 Use `lojban-cmene-p' for an exact discrimination.
 
-See also `lojban-brivla-rgx.'.")
+See also `lojban-brivla-rgx'.")
 
 (defconst lojban-cmene-invalid-syllabes "\\(la\\|lai\\|doi\\)"
   "Syllables invalid in a cmene, unless preceded by a consonant.")
@@ -471,7 +491,9 @@ remapped for exponential notation")
   "Look up GISMU, and return its description line as string.
 
 With optional argument SHORT, just give a short definition.
-When called interactively, show that description in the message area."
+When called interactively, show that description in the message area.
+
+See also: `lojban-gismu-file'."
   (interactive "sGismu: ")
   (let ((p (lojban-gismu-lookup gismu)))
     (unless p (error "Unrecognized gismu: %s" gismu))
@@ -500,7 +522,9 @@ When called interactively, show that description in the message area."
   "Look up CMAVO, and return its description line as string.
 
 With optional argument SHORT, just give a short definition.
-When called interactively, show that description in the message area."
+When called interactively, show that description in the message area.
+
+See also: `lojban-cmavo-file'."
   (interactive "sCmavo: ")
   (let ((p (lojban-cmavo-lookup cmavo)))
     (unless p (error "Unrecognized cmavo: %s" cmavo))
@@ -617,11 +641,17 @@ See also `lojban-gloss-region'."
 ;;;; word lists
 
 (defcustom lojban-gismu-file "/usr/share/lojban/gismu"
-  "File where the gismu list can be retrieved."
+  "File where the gismu list can be retrieved.
+
+Required by `lojban-describe-gismu', the list can be downloaded from:
+https://www.lojban.org/publications/wordlists/gismu.txt"
   :group 'lojban)
 
 (defcustom lojban-cmavo-file "/usr/share/lojban/cmavo"
-  "File where the cmavo list can be retrieved."
+  "File where the cmavo list can be retrieved.
+
+Required by `lojban-describe-cmavo', the list can be downloaded from:
+https://www.lojban.org/publications/wordlists/cmavo.txt"
   :group 'lojban)
 
 (defun lojban-find-gismu-buffer ()
